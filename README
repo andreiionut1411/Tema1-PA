@@ -1,0 +1,119 @@
+/* Ionescu Andrei Ionut - 321CB */
+
+				README
+
+	Pentru aceasta tema am ales sa implementez algoritmii in Java.
+
+	Task 1 - Walsh:
+	Complexitate temporala: Theta(log n)
+	Complexitate spatiala: Theta(1)
+	Pentru aceasta problema am folosit o abordare de tip Divide et Impera. Pentru fiecare
+pas al algoritmului verific in ce cadran al matricii ne aflam. Apoi, in functie de acest lucru
+ne translatam indicii x si y astfel incat sa ajunga in coltul din dreapta sus care reprezinta
+de fapt matricea W(N/2). Apoi apelam recursiv functia si returnam rezultatul obtinut, sau
+negatul acestuia, daca ne aflam in cadranul 4. Iesim din recursivitate cand N ajunge sa fie 1.
+	Avem astfel o recurenta de tipul T(n) = T(n/2) + O(1), deoarece costul nerecursiv este Theta(1).
+Aplicam Master cu a = 1, b = 2. Cum log b(a) = 0, iar O(1) = O(n^0), atunci ne aflam in cazul II al
+metodei. De aici, inseamna ca avem complexitatea recursivitatii de Theta(log n). 
+
+	Task 2 - Statistics:
+	Complexitate temporala: O(n*log(n) + n*l), unde l este lungimea cuvintelor
+	Complexitate spatiala: O(n)
+	Pentru aceasta problema folosim o abordare de tip Greedy. Pentru fiecare litera din alfabetul
+englez, verificam de cate ori apare in fiecare dintre cuvinte. Pentru aceasta, avem nevoie de 3 for-uri.
+Unul pentru litere, unul pentru N cuvinte, si cate inca un for pentru a verifica fiecare litera din fiecare
+cuvant. Cum numarul de litere din alfabet este o constanta, acesta nu va aparea in complexitatea
+finala. Astfel, pentru verificarea de cate ori apare o anumita litera intr-un cuvant avem complexitate
+O(n*l), unde l este lungimea cuvintelor. Dupa ce am calculat mai devreme, vedem cate litere NU sunt
+litera cautata in cuvant, iar apoi facem diferenta. Astfel, spre exemplu, daca litera c pe care o cautam
+apare de exact jumatate de ori, atunci diferenta va fi 0. Dupa aceea, sortam aceste diferente, sortare
+care are complexitate O(n*log(n)). Dupa aceea, adunam diferentele pana cand suma lor devine mai
+mica sau egala cu 0, moment in care ne oprim. In acest tip numaram cate cuvinte putem sa concatenam.
+Aceasta parcurgere are complexitate de O(n). Algoritmul final are complexitatea obtinuta prin
+adunarea tuturor complexitatilor anterioare. Cum O(n) este clar mai mica, nu va aparea in termenul
+final. Astfel, vom obtine o complexitate de O(n*log(n)+n*l), intrucat in problema nu ni se spune
+explicit care este legatura dintre lungimea cuvintelor l si numarul acestora.
+	Cum pentru fiecare cuvant, numaram diferenta dintre numarul de aparitii al literei cautate si
+numarul de aparitie al celorlalte, rezultatele acestui calcul vor fi tinute intr-un vector. De aceea,
+vom avea o complexitate spatiala de O(n).
+
+	Task 3 - Prinel:
+	Complexitate temporala: O(n * k + M * sqrt(M))
+	Complexitate spatiala: O(k), unde k este numarul maxim de operatii pe care le putem efectua.
+	Problema se poate imparti in 2 subprobleme, gasirea numarului minim de operatii pentru un
+anumit x, si alegerea acelor numere care la final ne dau scorul cel mai bun. Aceasta a doua problema
+este fix problema rucsacului discret discutata si la curs si la laborator. Pentru ea am folosit solutia
+standard cu programare dinamica. Astfel, aceasta parte a problemei are complexitate temporala de
+O(n * k). Ne mai ramane gasirea numarului minim de operatii. Aceasta subproblema o rezolvam tot
+cu programare dinamica. Vom avea un vector in care elementul de pe pozitia i tine numarul minim
+de operatii facute pentru a se ajunge la numarul respectiv. Cum tinem minte intr-un vector numarul
+minim de operatii pentru toate numerele de la 1 la M, unde M este cel mai mare numar din fisier,
+inseamna ca trebuie doar sa calculam numarul de operatii pentru necesare pentru acest M, iar
+restul pur si simplu vor lua din tablou rezultatul propriu. In ceea ce priveste gasirea propriu-zisa
+a numarului minim de operatii, tinem cont ca pe numarul x il vom inlocui cu x + div, unde div este
+un divizor al lui x, deci si x + div va fi divizibil cu div. Asa ca, pentru numarul curent, trecem prin
+divizorii sai si alegem minimul din a[i - div], unde a este tabloul in care memoram valorile anterioare
+si div este un divizor al numarului curent. In concluzie, elementul a[i] = 1 + min(a[i-div]), adaugam
+1 deoarece de la i-div la i este n un singur pas, si anume adunarea cu div. Cum pentru fiecare numar
+de la 1 la M ne plimbam printre divizorii sai, pana la sqrt din el, complexitatea temporala gasirii
+numarului minim de operatii este O(M * sqrt(M)). Cum trebuie sa calculam doar o data
+practic vectorul pana la elementul M, iar celelalte doar iau valoarea corespunzatoare din vector,
+avem complexitatea O(M*sqrt(M)). In concluzie, complexitatea temporala
+este obtinuta prin adunarea complexitatilor celor 2 subprobleme si obtinem
+O(n * k + M * sqrt(M)).
+
+	Task 4 - Crypto:
+	Complexitate temporala: O(n*l^2), unde l este lungimea subsirului
+	Complexitate spatiala: O(n * l)
+	Pentru aceasta problema ne vom folosi de o matrice cu L linii si N coloane, de unde si
+complexitatea spatiala necesara. Pe linia i si coloana j vom avea de cate ori a aparut subsirul format
+din primele (i+1) elemente in subsirul format din primele (j + 1) elemente din K (apare +1 pentru ca 
+indexarea incpe la 0). Pentru exemplificarea recurentei sa zicem ca vrem sa cautam subsirul "pa"
+in subsirul A = "paaca". Pentru acest pas, avem deja toate aparitiile subsirului B = "pa" in subisrul "paac".
+Cum ultima litera din subsirul A corespunde cu cea din B, atunci vom avea numarul de aparitii ale lui B
+in "paac" (pentru ca acestea implicit se afla in subsir si daca acesta este mai mare). In plus, la acestea
+se vor mai adauga si unele noi formate, adica cele care apar dupa adaugarea ultimei litere, in cazul
+nostru 'a', la subsirurile "p" care erau deja in "paac". Pe scurt, M[i][j] = M[i][j-1], daca ultima litera
+a lui A diferea de cea a lui B, sau M[i][j] = M[i-1][j-1] + M[i][j-1]. Daca avem de-a face cu un caracter
+wild card '?', atunci pentru fiecare litera cu care poate fi inlocuit se calculeaza valoarea de mai sus
+si se insumeaza pentru a obtine un M[i][j]. Un caz deosebit il constituie momentul in care subsirul
+cautat este format dintr-o singura litera. Adica, daca avem A = "pa?c" si B = "c", atunci daca ultima
+litera a lui A ar fi fost diferita de cea a lui B, recurenta ar fi ramas M[i][j] = M[i][j-1]. Dar, daca se
+intampla ca in exemplu, ultima litera din B sa fie aceiasi cu cea a lui A, trebuie sa luam in calcul si toate
+literele posibile cu care pot fi inlocuite toate semnele '?'. Daca in exemplul nostru S = "pa", atunci
+'?' poate fi inlocuit cu 2 litere. Deci, cuvantul nostru A poate avea 2 forme: "paac" si "papc". De aceea,
+in cazul in care B este o singura litera si ultima litera a lui A este B, atunci recurenta noastra devine
+M[i][j] = M[i][j-1] + nr_litere_wild_card^nr_semne_wild_card, unde nr_litere_wild_card este numarul
+de litere distincte cu care poate fi inlocuit semnul '?'. Cum avem nevoie de 2 for-uri ca sa populam
+matricea, si daca dam de un caracter '?' mai avem un for pentru a calcula valorile pentru fiecare
+litera cu care poate fi inlocuit, vom avea complexitatea O(n * l * l) = O(n * l^2). In rest, mai avem
+un for pentru a calcula numarul de litere distincte, doar ca are o complexitate mai mica decat
+algoritmul nostru, asa ca nu va aparea in termenul final al complexitatii.
+
+	Task 5 - Regele:
+	Complexitate temporala: O(N^2 + Q*log(N))
+	Complexitate spatiala: O(N^2)
+	Pentru aceasta problema am folosit o abordare de timp programare dinamica. Inainte de a
+da raspunsul la cele Q intrebari, mai intai am calculat pentru fiecare numar de orase care trebuie
+activate, numarul maxim necesar de negustori. Apoi, dupa ce aveam acest raspuns, am facut o
+cautare binara in acest sir a raspunsurilor, de aici apare termenul O(Q*log(n)), tinand cont de faptul
+ca avem Q raspunsuri care trebuiesc cautate in sir. Partea principala a algoritmului sta in calcularea
+numarului maxim de negustori. Pentru aceasta, am folosit o matrice pentru care coordonatele i si j
+inseamna numarul de negustori necesari pentru a activa i orase, daca primul oras activat este j.
+Pentru aceasta problema am mai folosit si o clasa numita Oras care contine marimea rutei din stanga,
+marimea celei din dreapta, si numarul de negustori necesari pentru activare. Pentru aceasta problema,
+m-am folosit de faptul ca daca avem 2 orase pe care vrem sa le activam, atunci este mai bine sa NU
+activam 2 orase consecutive, ci ele sa aiba cel putin un oras intre ele. Astfel, ambele au cate 2 rute
+(exceptand cazul cand unul este la margine), si daca vedem cati negustori avem nevoie pentru a le
+activa, vom observa ca sunt mai multi decat daca am fi ales 2 orase consecutive. Astfel, daca vrem
+sa activam i orase pornind de la orasul j, ne uitam atunci care este numarul maxim de negustori
+necesari pentru a acoperi i - 1 orase, incepand cautarea de la orasul j + 2. Pentru o complexitate
+mai buna, si pentru a nu calcula de fiecare data maximul dintre valorile de pe pozitiile [i-1][j+2...N],
+folosim un vector care retine aceste maxime pentru randul anterior. Astfel, elementul de pe
+pozitia [i][j] va fi numarul de negustori necesari activarii orasului j, la care se aduna maximul precizat
+anterior. Dupa ce s-au calculat toate valorile de pe randul i, atunci calculam maximul de pe rand
+pentru a afla astfel care este numarul minim necesar de negustori pentru a activa oricare i orase.
+Acest rezultat il luam si il introducem apoi in vectorul nostru rezultat. Dupa cum am precizat,
+daca se aleg orase care nu sunt vecine, implicit vor fi nevoie de mai multi negustori, atunci
+odata ce s-au activat jumatate dintre ele, inseamna implicit ca s-au activat si orasele intermediare.
+Deci practic, pentru oricare i mai mare de jumatate,  rezultatul este acelasi, si anume coord[N] - coord[1].
